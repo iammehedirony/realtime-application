@@ -43,7 +43,7 @@ const ChatApp = () => {
 
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [message, setMessage] = useState("");
-    const [siderbarOpen, setSiderbarOpen] = useState(false);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const [messages, setMessages] = useState<Message[] | null>(null);
     const [user, setUser] = useState<User | null>(null);
     const [showAllUser, setShowAllUser] = useState(false);
@@ -377,10 +377,11 @@ const ChatApp = () => {
 
     if (loading) return <Loading />;
     return (
-        <div className="min-h-screen flex bg-gray-900 text-white relative overflow-hidden">
+        <div className="h-screen w-full flex overflow-hidden relative" style={{ backgroundColor: '#121212' }}>
+            {/* Sidebar */}
             <ChatSidebar
-                sidebarOpen={siderbarOpen}
-                setSidebarOpen={setSiderbarOpen}
+                sidebarOpen={sidebarOpen}
+                setSidebarOpen={setSidebarOpen}
                 showAllUsers={showAllUser}
                 setShowAllUsers={setShowAllUser}
                 users={users}
@@ -392,20 +393,34 @@ const ChatApp = () => {
                 createChat={createChat}
                 onlineUsers={onlineUsers}
             />
-            <div className="flex-1 flex flex-col justify-between p-4 backdrop-blur-xl bg-white/5 border-1 border-white/10">
+
+            {/* Main Chat Area - Full height, flush */}
+            <div className="flex-1 h-full flex flex-col min-w-0 relative">
+                {/* Mobile sidebar backdrop */}
+                {sidebarOpen && (
+                    <div 
+                        className="fixed inset-0 z-10 sm:hidden bg-black/50 backdrop-blur-sm" 
+                        onClick={() => setSidebarOpen(false)}
+                        aria-hidden="true"
+                    />
+                )}
+
+                {/* Chat Header */}
                 <ChatHeader
                     user={user}
-                    setSidebarOpen={setSiderbarOpen}
+                    setSidebarOpen={setSidebarOpen}
                     isTyping={isTyping}
                     onlineUsers={onlineUsers}
                 />
 
+                {/* Messages Area */}
                 <ChatMessages
                     selectedUser={selectedUser}
                     messages={messages}
                     loggedInUser={loggedInUser}
                 />
 
+                {/* Input Area - Floating pill at bottom */}
                 <MessageInput
                     selectedUser={selectedUser}
                     message={message}

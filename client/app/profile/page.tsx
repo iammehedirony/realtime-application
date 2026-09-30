@@ -57,56 +57,64 @@ const ProfilePage = () => {
 
     if (loading) return <Loading />;
     return (
-        <div className="min-h-screen bg-gray-900 p-4">
-            <div className="max-w-2xl mx-auto pt-8">
-                <div className="flex items-center gap-4 mb-8">
+        <div className="min-h-screen p-4 sm:p-6 lg:p-8" style={{ backgroundColor: '#121212' }}>
+            <div className="max-w-3xl mx-auto">
+                {/* Header */}
+                <div className="flex items-center gap-4 mb-8 animate-fade-in">
                     <button
                         onClick={() => router.push("/chat")}
-                        className="p-3 bg-gray-800 hover:bg-gray-700 rounded-lg border border-gray-700"
+                        className="p-3 rounded-xl transition-colors flex-shrink-0"
+                        style={{ backgroundColor: 'var(--card-bg)' }}
                     >
-                        <ArrowLeft className="w-5 h-5 text-gray-300" />
+                        <ArrowLeft className="w-5 h-5 text-[var(--muted-text)]" />
                     </button>
                     <div>
-                        <h1 className="text-3xl font-bold text-white">
+                        <h1 className="text-3xl sm:text-4xl font-bold text-white tracking-tight">
                             Profile Settings
                         </h1>
-                        <p className="text-gray-400 mt-1">
+                        <p className="text-[var(--muted-text)] mt-1">
                             Manage your account information
                         </p>
                     </div>
                 </div>
 
-                <div className="bg-gray-800 rounded-lg border border-gray-700 shadow-lg">
-                    <div className="bg-gray-700 p-8 border-b border-gray-600">
-                        <div className="flex items-center gap-6">
-                            <div className="relative">
-                                <div className="w-20 h-20 rounded-full bg-gray-600 flex items-center justify-center">
-                                    <UserCircle className="w-12 h-12 text-gray-300" />
+                {/* Profile Card */}
+                <div className="rounded-2xl border border-[var(--card-border)] overflow-hidden animate-slide-in" style={{ backgroundColor: 'var(--card-bg)' }}>
+                    {/* Profile Header */}
+                    <div className="p-6 sm:p-8 border-b border-[var(--card-border)]">
+                        <div className="flex items-center gap-5 sm:gap-6">
+                            <div className="relative flex-shrink-0">
+                                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-[var(--card-border)] flex items-center justify-center">
+                                    <UserCircle className="w-12 h-12 sm:w-14 sm:h-14 text-[var(--muted-text)]" />
                                 </div>
-                                <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-green-500 rounded-full border-2 border-gray-800"></div>
+                                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-[var(--card-bg)] pulse-ring" style={{ backgroundColor: '#03CBA1' }}>
+                                    <span className="absolute inset-0 rounded-full" style={{ backgroundColor: '#03CBA1', opacity: 0.3 }} />
+                                </div>
                             </div>
-                            <div className="flex-1">
-                                <h2 className="text-2xl font-bold text-white mb-1">
+                            <div className="flex-1 min-w-0">
+                                <h2 className="text-2xl sm:text-3xl font-bold text-white truncate">
                                     {user?.name || "User"}
                                 </h2>
-                                <p className="text-gray-300 text-sm">
-                                    Active now
+                                <p className="text-sm mt-1 flex items-center gap-1.5" style={{ color: '#03CBA1' }}>
+                                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#03CBA1' }} />
+                                    <span className="font-medium">Active now</span>
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="p-8">
+                    {/* Profile Form */}
+                    <div className="p-6 sm:p-8">
                         <div className="space-y-6">
                             <div>
-                                <label className="block text-sm font-semibold text-gray-300 mb-3">
+                                <label className="block text-sm font-semibold text-[var(--muted-text)] mb-3">
                                     Display Name
                                 </label>
 
                                 {isEdit ? (
                                     <form
                                         onSubmit={submitHandler}
-                                        className="space-y-4"
+                                        className="space-y-4 animate-fade-in"
                                     >
                                         <div className="relative">
                                             <input
@@ -115,45 +123,81 @@ const ProfilePage = () => {
                                                 onChange={(e) =>
                                                     setName(e.target.value)
                                                 }
-                                                className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400"
+                                                className="w-full pl-12 pr-4 py-4 bg-[var(--input-bg)] border border-[var(--input-border)] rounded-xl text-white placeholder-[var(--subtle-text)] transition-all duration-200 focus:border-[var(--input-focus)] focus:ring-2 focus:ring-[var(--accent-muted)] focus:outline-none"
                                             />
-                                            <User className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[var(--subtle-text)]" />
                                         </div>
 
-                                        <div className="flex gap-3">
+                                        <div className="flex gap-3 pt-2">
                                             <button
                                                 type="submit"
-                                                className="flex items-center gap-2 px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg"
+                                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-[var(--accent-muted)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+                                                style={{ backgroundColor: '#03CBA1' }}
                                             >
-                                                <Save className="w-4 h-4" />{" "}
-                                                Save Changes
+                                                <Save className="w-4 h-4" />
+                                                <span>Save Changes</span>
                                             </button>
                                             <button
                                                 type="button"
                                                 onClick={editHandler}
-                                                className="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
+                                                className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-[var(--card-border)] focus:ring-offset-2 focus:ring-offset-[var(--background)]"
+                                                style={{ backgroundColor: 'var(--card-border)' }}
                                             >
                                                 Cancel
                                             </button>
                                         </div>
                                     </form>
                                 ) : (
-                                    <div className="flex items-center justify-between p-4 bg-gray-700 rounded-lg border border-gray-600">
-                                        <span className="text-white font-medium text-lg">
+                                    <div className="flex items-center justify-between p-4 rounded-xl" style={{ backgroundColor: 'var(--input-bg)', border: '1px solid var(--input-border)' }}>
+                                        <span className="text-white font-medium text-lg truncate">
                                             {user?.name || "Not set"}
                                         </span>
                                         <button
                                             onClick={editHandler}
-                                            className="flex items-center gap-2 px-6 py-3 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg"
+                                            className="flex items-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-white transition-all duration-200 focus:ring-2 focus:ring-[var(--accent-muted)] focus:ring-offset-2 focus:ring-offset-[var(--background)] flex-shrink-0"
+                                            style={{ backgroundColor: '#03CBA1' }}
                                         >
-                                            Edit
+                                            <User className="w-4 h-4" />
+                                            <span>Edit</span>
                                         </button>
                                     </div>
                                 )}
                             </div>
+
+                            {/* Additional Info Section */}
+                            <div className="pt-6 border-t border-[var(--card-border)]">
+                                <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                                    <div className="p-1.5 rounded-lg" style={{ background: 'rgba(3, 203, 161, 0.15)' }}>
+                                        <User className="w-4 h-4" style={{ color: '#03CBA1' }} />
+                                    </div>
+                                    Account Information
+                                </h3>
+                                <div className="space-y-3">
+                                    <div className="flex items-center justify-between p-4 rounded-xl" style={{ backgroundColor: 'var(--input-bg)', border: '1px solid var(--input-border)' }}>
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-2 rounded-lg" style={{ background: 'rgba(3, 203, 161, 0.1)' }}>
+                                                <svg className="w-5 h-5" style={{ color: '#03CBA1' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                                </svg>
+                                            </div>
+                                            <div>
+                                                <p className="text-xs font-medium text-[var(--subtle-text)]">User ID</p>
+                                                <p className="text-sm font-mono text-[var(--muted-text)] truncate max-w-[200px]">
+                                                    {user?._id || "—"}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {/* Footer hint */}
+                <p className="text-center text-[var(--subtle-text)] text-sm mt-6">
+                    Your data is securely stored and never shared with third parties.
+                </p>
             </div>
         </div>
     );

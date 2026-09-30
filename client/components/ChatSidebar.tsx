@@ -1,252 +1,415 @@
 import { User } from "@/context/AppContext";
 import {
-  CornerDownRight,
-  CornerUpLeft,
-  Divide,
-  LogOut,
-  MessageCircle,
-  Plus,
-  Search,
-  UserCircle,
-  X,
+    CornerDownRight,
+    CornerUpLeft,
+    LogOut,
+    MessageCircle,
+    Plus,
+    Search,
+    UserCircle,
+    X,
 } from "lucide-react";
 import Link from "next/link";
 import React, { useState } from "react";
 
 interface ChatSidebarProps {
-  sidebarOpen: boolean;
-  setSidebarOpen: (open: boolean) => void;
-  showAllUsers: boolean;
-  setShowAllUsers: (show: boolean | ((prev: boolean) => boolean)) => void;
-  users: User[] | null;
-  loggedInUser: User | null;
-  chats: any[] | null;
-  selectedUser: string | null;
-  setSelectedUser: (userId: string | null) => void;
-  handleLogout: () => void;
-  createChat: (user: User) => void;
-  onlineUsers: string[];
+    sidebarOpen: boolean;
+    setSidebarOpen: (open: boolean) => void;
+    showAllUsers: boolean;
+    setShowAllUsers: (show: boolean | ((prev: boolean) => boolean)) => void;
+    users: User[] | null;
+    loggedInUser: User | null;
+    chats: any[] | null;
+    selectedUser: string | null;
+    setSelectedUser: (userId: string | null) => void;
+    handleLogout: () => void;
+    createChat: (user: User) => void;
+    onlineUsers: string[];
 }
 
 const ChatSidebar = ({
-  sidebarOpen,
-  setShowAllUsers,
-  setSidebarOpen,
-  showAllUsers,
-  users,
-  loggedInUser,
-  chats,
-  selectedUser,
-  setSelectedUser,
-  handleLogout,
-  createChat,
-  onlineUsers,
+    sidebarOpen,
+    setShowAllUsers,
+    setSidebarOpen,
+    showAllUsers,
+    users,
+    loggedInUser,
+    chats,
+    selectedUser,
+    setSelectedUser,
+    handleLogout,
+    createChat,
+    onlineUsers,
 }: ChatSidebarProps) => {
-  const [searchQuery, setSearchQuery] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
-  return (
-    <aside
-      className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 bg-gray-900 border-r border-gray-700 transform ${
-        sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } sm:translate-x-0 transition-transform duration-300 flex flex-col`}
-    >
-      {/* header */}
-      <div className="p-6 border-b border-gray-700">
-        <div className="sm:hidden flex justify-end mb-0">
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
-          >
-            <X className="w-5 h-5 text-gray-300" />
-          </button>
-        </div>
+    return (
+        <aside
+            className={`fixed z-20 sm:static top-0 left-0 h-screen w-80 border-r transition-transform duration-300 flex flex-col overflow-x-hidden ${
+                sidebarOpen ? "translate-x-0" : "-translate-x-full"
+            } sm:translate-x-0`}
+            style={{
+                backgroundColor: "#0a0a0a",
+                borderColor: "#1e1e1e",
+            }}
+        >
+            {/* Header */}
+            <div
+                className="p-5 border-b flex-shrink-0"
+                style={{ borderColor: "#1e1e1e" }}
+            >
+                <div className="sm:hidden flex justify-end mb-4">
+                    <button
+                        onClick={() => setSidebarOpen(false)}
+                        className="p-2.5 rounded-xl transition-colors"
+                        style={{ backgroundColor: "rgba(255,255,255,0.03)" }}
+                        aria-label="Close sidebar"
+                    >
+                        <X
+                            className="w-5 h-5"
+                            style={{ color: "var(--muted-text)" }}
+                        />
+                    </button>
+                </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-600 justify-between">
-              <MessageCircle className="w-5 h-5 text-white" />
-            </div>
-            <h2 className="text-xl font-bold text-white">
-              {showAllUsers ? "New Chat" : "Messages"}
-            </h2>
-          </div>
-
-          <button
-            className={`p-2.5 rounded-lg transition-colors ${
-              showAllUsers
-                ? "bg-red-600 hover:bg-red-700 text-white"
-                : "bg-green-600 hover:bg-green-700 text-white"
-            }`}
-            onClick={() => setShowAllUsers((prev) => !prev)}
-          >
-            {showAllUsers ? (
-              <X className="w-4 h-4" />
-            ) : (
-              <Plus className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-      </div>
-
-      {/* content */}
-      <div className="flex-1  overflow-hidden px-4 py-2">
-        {showAllUsers ? (
-          <div className="space-y-4 h-full">
-            <div className="relative">
-              <Search className="absolute left-3  top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Search Users..."
-                className="w-full pl-10 pr-4 py-3 bg-gray-800 border border-gray-700 text-white placeholder-gray-400"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-              />
-            </div>
-
-            {/* users list */}
-            <div className="space-y-2 overflow-y-auto h-full pb-4">
-              {users
-                ?.filter(
-                  (u) =>
-                    u._id !== loggedInUser?._id &&
-                    u.name
-                      .toLowerCase()
-                      .includes(searchQuery.toLocaleLowerCase())
-                )
-                .map((u) => (
-                  <button
-                    key={u._id}
-                    className="w-full text-left p-4 rounded-lg border border-gray-700 hover:border-gray-600 hover:bg-gray-800 transition-colors"
-                    onClick={() => createChat(u)}
-                  >
+                <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className="relative">
-                        <UserCircle className="w-6 h-6 text-gray-300" />
-                        {onlineUsers.includes(u._id) && (
-                          <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <span className="font-medium text-white">{u.name}</span>
-                        <div className="text-xs text-gray-400 mt-0.5">
-                          {/* to show online offline text */}
-                          {onlineUsers.includes(u._id) ? "Online" : "Offline"}
-                        </div>
-                      </div>
-                    </div>
-                  </button>
-                ))}
-            </div>
-          </div>
-        ) : chats && chats.length > 0 ? (
-          <div className="space-y-2 overflow-y-auto h-full pb-4">
-            {chats.map((chat) => {
-              const latestMessage = chat.chat.latestMessage;
-              const isSelected = selectedUser === chat.chat._id;
-              const isSentByMe = latestMessage?.sender === loggedInUser?._id;
-              const unseenCount = chat.chat.unseenCount || 0;
-
-              return (
-                <button
-                  key={chat.chat._id}
-                  onClick={() => {
-                    setSelectedUser(chat.chat._id);
-                    setSidebarOpen(false);
-                  }}
-                  className={`w-full text-left p-4 rounded-lg transition-colors ${
-                    isSelected
-                      ? "bg-blue-600 border border-blue-500"
-                      : "border border-gray-700 hover:border-gray-600"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="relative">
-                      <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
-                        <UserCircle className="w-7 h-7 text-gray-300" />
-                        {/* onlineuser ka work hai */}
-                      </div>
-                      {onlineUsers.includes(chat.user._id) && (
-                        <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-green-500 border-2 border-gray-900" />
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-1">
-                        <span
-                          className={`font-semibold truncate ${
-                            isSelected ? "text-white" : "text-gray-200"
-                          }`}
+                        <div
+                            className="p-2.5 rounded-xl"
+                            style={{ background: "rgba(3, 203, 161, 0.15)" }}
                         >
-                          {chat.user.name}
-                        </span>
-                        {unseenCount > 0 && (
-                          <div className="bg-red-600 text-white text-xs font-bold rounded-full min-w-[22px] h-5.5 flex items-center justify-center px-2">
-                            {unseenCount > 99 ? "99+" : unseenCount}
-                          </div>
-                        )}
-                      </div>
-
-                      {latestMessage && (
-                        <div className="flex items-center gap-2">
-                          {isSentByMe ? (
-                            <CornerUpLeft
-                              size={14}
-                              className="text-blue-400 text-shrink-0"
+                            <MessageCircle
+                                className="w-5 h-5"
+                                style={{ color: "#03CBA1" }}
                             />
-                          ) : (
-                            <CornerDownRight
-                              size={14}
-                              className="text-green-400 text-shrink-0"
-                            />
-                          )}
-                          <span className="text-sm text-gray-400 truncate flex-1">
-                            {latestMessage.text}
-                          </span>
                         </div>
-                      )}
+                        <h2 className="text-xl font-bold text-white">
+                            {showAllUsers ? "New Chat" : "Messages"}
+                        </h2>
                     </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <div className="p-4 bg-gray-800 rounded-full mb-4">
-              <MessageCircle className="w-8 h-8 text-gray-400" />
+
+                    <button
+                        className="p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center"
+                        onClick={() => setShowAllUsers((prev) => !prev)}
+                        style={{
+                            backgroundColor: showAllUsers
+                                ? "rgba(255,255,255,0.03)"
+                                : "#03CBA1",
+                            color: showAllUsers
+                                ? "var(--muted-text)"
+                                : "#121212",
+                        }}
+                        aria-label={
+                            showAllUsers ? "Back to messages" : "Start new chat"
+                        }
+                    >
+                        {showAllUsers ? (
+                            <X className="w-4 h-4" />
+                        ) : (
+                            <Plus className="w-4 h-4" />
+                        )}
+                    </button>
+                </div>
             </div>
-            <p className="text-gray-400 font-medium">No conversation yet</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Start a new chat to begin messaging
-            </p>
-          </div>
-        )}
-      </div>
 
-      {/* footer */}
-      <div className="p-4 border-t border-gray-700 space-y-2">
-        <Link
-          href={"/profile"}
-          className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-800 transition-colors"
-        >
-          <div className="p-1.5 bg-gray-700 rounded-lg">
-            <UserCircle className="w-4 h-4 text-gray-300" />
-          </div>
-          <span className="font-medium text-gray-300">Profile</span>
-        </Link>
+            {/* Content */}
+            <div className="flex-1 overflow-hidden flex flex-col">
+                {showAllUsers ? (
+                    <div className="flex flex-col h-full">
+                        {/* Search */}
+                        <div
+                            className="p-4 border-b flex-shrink-0"
+                            style={{ borderColor: "#1e1e1e" }}
+                        >
+                            <div className="relative">
+                                <Search
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4"
+                                    style={{ color: "var(--subtle-text)" }}
+                                    aria-hidden="true"
+                                />
+                                <input
+                                    type="text"
+                                    id="sidebar-search"
+                                    placeholder=" " /* Added placeholder for peer to work properly */
+                                    className="peer w-full pl-11 pr-4 py-3.5 rounded-xl text-white bg-transparent transition-all duration-200 focus:outline-none focus:ring-0 border-transparent"
+                                    value={searchQuery}
+                                    onChange={(e) =>
+                                        setSearchQuery(e.target.value)
+                                    }
+                                    style={{
+                                        backgroundColor:
+                                            "rgba(255,255,255,0.03)",
+                                        border: "1px solid rgba(255,255,255,0.08)",
+                                    }}
+                                />
+                                <label
+                                    htmlFor="sidebar-search"
+                                    className="absolute left-12 top-1/2 -translate-y-1/2 text-sm transition-all duration-200 pointer-events-none text-[var(--subtle-text)] peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100 peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-85 peer-focus:text-[#03CBA1] peer-focus:bg-[#0a0a0a] peer-focus:px-1 [&:not(:placeholder-shown)]:top-0 [&:not(:placeholder-shown)]:-translate-y-1/2 [&:not(:placeholder-shown)]:scale-85 [&:not(:placeholder-shown)]:bg-[#0a0a0a] [&:not(:placeholder-shown)]:px-1"
+                                >
+                                    Search Users...
+                                </label>
+                            </div>
+                        </div>
 
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-colors text-red-500 hover:text-white"
-        >
-          <div className="p-1.5 bg-red-600 rounded-lg">
-            <LogOut className="w-4 h-4 text-gray-300" />
-          </div>
-          <span className="font-medium">Logout</span>
-        </button>
-      </div>
-    </aside>
-  );
+                        {/* Users List */}
+                        <div
+                            className="flex-1 overflow-y-auto overflow-x-hidden pb-4 px-3 pt-3 custom-scroll"
+                            style={{ scrollbarWidth: "thin" }}
+                        >
+                            {users
+                                ?.filter(
+                                    (u) =>
+                                        u._id !== loggedInUser?._id &&
+                                        u.name
+                                            .toLowerCase()
+                                            .includes(
+                                                searchQuery.toLocaleLowerCase(),
+                                            ),
+                                )
+                                .map((u) => (
+                                    <button
+                                        key={u._id}
+                                        className="w-full px-4 py-3.5 rounded-xl transition-all duration-150 flex items-center gap-3 hover:bg-white/3 mb-1"
+                                        onClick={() => createChat(u)}
+                                        style={{ borderRadius: "14px" }}
+                                    >
+                                        <div className="relative flex-shrink-0">
+                                            <div
+                                                className="w-12 h-12 rounded-full flex items-center justify-center"
+                                                style={{
+                                                    backgroundColor: "#1e1e1e",
+                                                }}
+                                            >
+                                                <UserCircle
+                                                    className="w-7 h-7"
+                                                    style={{
+                                                        color: "var(--muted-text)",
+                                                    }}
+                                                />
+                                            </div>
+                                            {onlineUsers.includes(u._id) && (
+                                                <span
+                                                    className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2"
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#03CBA1",
+                                                        borderColor: "#0a0a0a",
+                                                    }}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <div className="flex-1 min-w-0 text-left">
+                                            <p className="font-medium text-white truncate">
+                                                {u.name}
+                                            </p>
+                                            <p
+                                                className="text-xs mt-0.5"
+                                                style={{
+                                                    color: onlineUsers.includes(
+                                                        u._id,
+                                                    )
+                                                        ? "#03CBA1"
+                                                        : "var(--subtle-text)",
+                                                }}
+                                            >
+                                                {onlineUsers.includes(u._id)
+                                                    ? "Online"
+                                                    : "Offline"}
+                                            </p>
+                                        </div>
+                                    </button>
+                                ))}
+                        </div>
+                    </div>
+                ) : chats && chats.length > 0 ? (
+                    <div
+                        className="flex-1 overflow-y-auto overflow-x-hidden pb-4 px-3 pt-3 custom-scroll"
+                        style={{ scrollbarWidth: "thin" }}
+                    >
+                        {chats.map((chat) => {
+                            const latestMessage = chat.chat.latestMessage;
+                            const isSelected = selectedUser === chat.chat._id;
+                            const isSentByMe =
+                                latestMessage?.sender === loggedInUser?._id;
+                            const unseenCount = chat.chat.unseenCount || 0;
+
+                            return (
+                                <button
+                                    key={chat.chat._id}
+                                    onClick={() => {
+                                        setSelectedUser(chat.chat._id);
+                                        setSidebarOpen(false);
+                                    }}
+                                    className={`w-full px-4 py-3.5 rounded-xl transition-all duration-150 flex items-center gap-3 mb-1 ${
+                                        isSelected
+                                            ? "bg-white/5"
+                                            : "hover:bg-white/3"
+                                    }`}
+                                    style={{
+                                        borderRadius: "14px",
+                                        backgroundColor: isSelected
+                                            ? "rgba(3, 203, 161, 0.12)"
+                                            : "transparent",
+                                    }}
+                                >
+                                    <div className="relative flex-shrink-0">
+                                        <div
+                                            className="w-12 h-12 rounded-full flex items-center justify-center"
+                                            style={{
+                                                backgroundColor: "#1e1e1e",
+                                            }}
+                                        >
+                                            <UserCircle
+                                                className="w-7 h-7"
+                                                style={{
+                                                    color: "var(--muted-text)",
+                                                }}
+                                            />
+                                        </div>
+                                        {onlineUsers.includes(
+                                            chat.user._id,
+                                        ) && (
+                                            <span
+                                                className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full border-2"
+                                                style={{
+                                                    backgroundColor: "#03CBA1",
+                                                    borderColor: "#0a0a0a",
+                                                }}
+                                            />
+                                        )}
+                                    </div>
+                                    <div className="flex-1 min-w-0 text-left">
+                                        <div className="flex items-center justify-between mb-1">
+                                            <p
+                                                className={`font-semibold truncate ${isSelected ? "text-white" : "text-white"}`}
+                                            >
+                                                {chat.user.name}
+                                            </p>
+                                            {unseenCount > 0 && (
+                                                <span
+                                                    className="flex-shrink-0 ml-2 min-w-[22px] h-5.5 rounded-full px-2 flex items-center justify-center text-xs font-bold"
+                                                    style={{
+                                                        backgroundColor:
+                                                            "#03CBA1",
+                                                        color: "#121212",
+                                                    }}
+                                                >
+                                                    {unseenCount > 99
+                                                        ? "99+"
+                                                        : unseenCount}
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        {latestMessage && (
+                                            <div className="flex items-center gap-2">
+                                                {isSentByMe ? (
+                                                    <CornerUpLeft
+                                                        size={13}
+                                                        className="text-shrink-0"
+                                                        style={{
+                                                            color: "#03CBA1",
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <CornerDownRight
+                                                        size={13}
+                                                        className="text-shrink-0"
+                                                        style={{
+                                                            color: "var(--muted-text)",
+                                                        }}
+                                                    />
+                                                )}
+                                                <p
+                                                    className="text-sm truncate flex-1"
+                                                    style={{
+                                                        color: isSelected
+                                                            ? "var(--muted-text)"
+                                                            : "var(--subtle-text)",
+                                                    }}
+                                                >
+                                                    {latestMessage.text}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </button>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className="flex flex-col items-center justify-center h-full text-center px-4">
+                        <div
+                            className="p-4 rounded-2xl mb-4"
+                            style={{ background: "rgba(3, 203, 161, 0.1)" }}
+                        >
+                            <MessageCircle
+                                className="w-8 h-8 mx-auto"
+                                style={{ color: "#03CBA1" }}
+                            />
+                        </div>
+                        <p
+                            className="font-medium"
+                            style={{ color: "var(--muted-text)" }}
+                        >
+                            No conversations yet
+                        </p>
+                        <p
+                            className="text-sm mt-1"
+                            style={{ color: "var(--subtle-text)" }}
+                        >
+                            Start a new chat to begin messaging
+                        </p>
+                    </div>
+                )}
+
+                {/* Footer */}
+                <div
+                    className="p-4 px-3 border-t flex-shrink-0 space-y-2 overflow-x-hidden"
+                    style={{ borderColor: "#1e1e1e" }}
+                >
+                    <Link
+                        href="/profile"
+                        className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-colors"
+                        style={{ borderRadius: "14px" }}
+                    >
+                        <div
+                            className="p-2.5 rounded-xl flex-shrink-0"
+                            style={{ background: "rgba(3, 203, 161, 0.15)" }}
+                        >
+                            <UserCircle
+                                className="w-4 h-4"
+                                style={{ color: "#03CBA1" }}
+                            />
+                        </div>
+                        <span className="font-medium text-white truncate">
+                            Profile
+                        </span>
+                    </Link>
+
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center gap-3 px-4 py-3.5 rounded-xl transition-colors"
+                        style={{ borderRadius: "14px" }}
+                    >
+                        <div
+                            className="p-2.5 rounded-xl flex-shrink-0"
+                            style={{ background: "rgba(255, 71, 87, 0.15)" }}
+                        >
+                            <LogOut
+                                className="w-4 h-4"
+                                style={{ color: "#ff4757" }}
+                            />
+                        </div>
+                        <span className="font-medium text-white truncate text-left">
+                            Logout
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+    );
 };
 
 export default ChatSidebar;
