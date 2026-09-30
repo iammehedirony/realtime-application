@@ -50,7 +50,9 @@ export const getAllChats = TryCatch(async (req: AuthenticatedRequest, res) => {
         return;
     }
 
-    const chats = await Chat.find({ users: userId } as any).sort({ updatedAt: -1 }).lean<IChat[]>();
+    const chats = await Chat.find({ users: userId } as any)
+        .sort({ updatedAt: -1 })
+        .lean<IChat[]>();
 
     const chatWithUserData = await Promise.all(
         chats.map(async (chat) => {
@@ -255,7 +257,7 @@ export const getMessagesByChat = TryCatch(
         }
 
         const isUserInChat = chat.users.some(
-            (userId) => userId.toString() === userId.toString(),
+            (id) => id.toString() === userId.toString(),
         );
 
         if (!isUserInChat) {
@@ -283,9 +285,13 @@ export const getMessagesByChat = TryCatch(
             },
         );
 
-        const messages = await Messages.find({ chatId } as any).sort({ createdAt: 1 }).lean<IMessage[]>();
+        const messages = await Messages.find({ chatId } as any)
+            .sort({ createdAt: 1 })
+            .lean<IMessage[]>();
 
-        const otherUserId = chat.users.find((id: string) => id.toString() !== userId.toString());
+        const otherUserId = chat.users.find(
+            (id: string) => id.toString() !== userId.toString(),
+        );
 
         const otherUser = await User.findById(otherUserId).lean();
 
