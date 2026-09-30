@@ -5,35 +5,31 @@ import { AuthenticatedRequest } from "../middlewares/isAuth.js";
 import { User } from "../models/User.js";
 
 export const loginUser = TryCatch(async (req, res) => {
-    const { email } = req.body;
+    const { email, name } = req.body;
 
-    const rateLimitKey = `login:ratelimit:${email}`;
-    const rateLimit = await redisClient.get(rateLimitKey);
-    if (rateLimit) {
-        res.status(429).json({
-            message:
-                "Too may requests. Please wait before requesting a new login",
+    if (!email) {
+        res.status(400).json({
+            message: "Email is required",
         });
         return;
     }
 
-    await redisClient.set(rateLimitKey, "true", {
-        EX: 60,
-    });
-
     let user = await User.findOne({ email });
 
     if (!user) {
-        res.status(404).json({
-            message: "User not found. Please register first",
-        });
-        return;
+        if (!name) {
+            res.status(400).json({
+                message: "Name is required for new users",
+            });
+            return;
+        }
+        user = await User.create({ email, name });
     }
 
     const token = generateToken(user);
 
     res.json({
-        message: "User Logged in successfully",
+        message: "User logged in successfully",
         user,
         token,
     });

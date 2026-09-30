@@ -20,12 +20,17 @@ redisClient
     .then(() => console.log("connected to redis"))
     .catch(console.error);
 
-app.use("/api/v1", userRoutes);
-app.use("/api/v1", chatRoutes);
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        credentials: true,
+    })
+);
 
 app.use(express.json());
 
-app.use(cors());
+app.use("/api/v1", userRoutes);
+app.use("/api/v1", chatRoutes);
 
 const port = process.env.PORT || 5000;
 

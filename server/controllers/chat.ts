@@ -72,7 +72,7 @@ export const getAllChats = TryCatch(async (req: AuthenticatedRequest, res) => {
                         ? otherUser
                         : { _id: otherUserId, name: "Unknown User" },
                     chat: {
-                        ...chat.toObject(),
+                        ...chat,
                         latestMessage: chat.latestMessage || null,
                         unseenCount,
                     },
@@ -82,7 +82,7 @@ export const getAllChats = TryCatch(async (req: AuthenticatedRequest, res) => {
                 return {
                     user: { _id: otherUserId, name: "Unknown User" },
                     chat: {
-                        ...chat.toObject(),
+                        ...chat,
                         latestMessage: chat.latestMessage || null,
                         unseenCount,
                     },
