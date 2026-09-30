@@ -11,7 +11,7 @@ import Cookies from "js-cookie";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-export const Api_Url = "http://localhost:5000";
+export const Api_Url = process.env.API_URL! || "http://localhost:5000";
 
 export interface User {
     _id: string;

@@ -3,20 +3,55 @@ version: '3.8'
 services:
   redis:
     image: redis:latest
-    container_name: my-redis
-    ports:
-      - "6379:6379"
+    container_name: chat-redis
     volumes:
       - redis_data:/data
+    networks:
+      - chat-network
 
   mongo:
     image: mongo:latest
-    container_name: my-mongo
-    ports:
-      - "27017:27017"
+    container_name: chat-mongo
     volumes:
       - mongo_data:/data/db
+    networks:
+      - chat-network
+
+  server:
+    build: ./server
+    container_name: chat-server
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./server/.env
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/chat-db
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - chat-network
+
+  client:
+      build:
+        context: ./client
+        args:
+          - API_URL=${API_URL}
+      container_name: chat-client
+      ports:
+        - "3000:3000"
+      env_file:
+        - ./client/.env
+      depends_on:
+        - server
+      networks:
+        - chat-network
 
 volumes:
   redis_data:
   mongo_data:
+
+networks:
+  chat-network:
+    driver: bridge
