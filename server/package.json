@@ -21,7 +21,6 @@
         "mongoose": "^9.10.3",
         "multer": "^2.4.0",
         "multer-storage-cloudinary": "^4.0.0",
-        "redis": "^6.2.1",
         "socket.io": "^4.8.4"
     },
     "devDependencies": {
@@ -32,7 +31,6 @@
         "@types/mongoose": "^5.11.96",
         "@types/multer": "^2.3.0",
         "@types/node": "^26.6.3",
-        "@types/redis": "^4.0.10",
         "@types/socket.io": "^3.0.1",
         "concurrently": "^10.0.5",
         "nodemon": "^3.1.14",

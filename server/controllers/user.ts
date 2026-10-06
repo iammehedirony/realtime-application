@@ -1,6 +1,5 @@
 import { generateToken } from "../config/generateToken.js";
 import TryCatch from "../config/TryCatch.js";
-import { redisClient } from "../index.js";
 import { AuthenticatedRequest } from "../middlewares/isAuth.js";
 import { User } from "../models/User.js";
 
